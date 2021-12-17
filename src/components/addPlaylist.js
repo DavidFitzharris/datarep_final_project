@@ -1,0 +1,141 @@
+import React from 'react';
+import axios from 'axios';
+
+//This class will be used to add albums to the app
+export class AddPlaylist extends React.Component {
+
+    //Using a constructor for our methods
+    constructor() {
+        super();
+
+        //Binding 
+        this.addPLName = this.addPLName.bind(this);
+        this.addPLGenre = this.addPLGenre.bind(this);
+        this.addPLLink = this.addPLLink.bind(this);
+        this.addPLImage = this.addPLImage.bind(this);
+        //Submit button 
+        this.onSubmit = this.onSubmit.bind(this);
+
+        //Creating the state
+        this.state = {
+            Name: '',
+            Genre: '',
+            Link: '',
+            Image: ''
+        }
+    }
+
+    //Methods to be used within the form
+    addPLName(e) {
+        this.setState({
+            Name: e.target.value
+        });
+    }
+
+    addPLGenre(e) {
+        this.setState({
+            Genre: e.target.value
+        });
+    }
+
+    addPLLink(e) {
+        this.setState({
+            Link: e.target.value
+        });
+    }
+
+    addPLImage(e) {
+        this.setState({
+            Image: e.target.value
+        });
+    }
+
+    onSubmit(e) {
+        e.preventDefault();
+        console.log(`button clicked
+        ${this.state.Name},
+        ${this.state.Genre},
+        ${this.state.Image},
+        ${this.state.Link},`);
+        this.setState({
+            Name: '',
+            Genre: '',
+            Image: '',
+            Link: '',
+        })
+
+        //Display inputs back
+        alert("Playlist: " + this.state.Name + " Genre: " + this.state.Genre + " Image: " + this.state.Image + " Link: " + this.state.Link);
+
+        //Creating a new playlist to be sent to our server
+        const newPlaylist = {
+            Name: this.state.Name,
+            Genre: this.state.Genre,
+            Image: this.state.Image,
+            Link: this.state.Link
+            };
+
+            //Post Method sending data to our server
+            axios.post('http://localhost:4000/api/playlists', newPlaylist)
+            .then(res => console.log(res.data));
+            
+            
+    }
+
+
+
+    render() {
+        return (
+            //creating a form to be used with our onSubmit method to search for movies
+            <div className='App'>
+                <form onSubmit={this.onSubmit}>
+
+                    {/* Name Input */}
+                    <div className="form-group">
+                        <label>Playlist Name: </label>
+                        <input type='text'
+                            className='form-control'
+                            value={this.state.Name}
+                            onChange={this.addPLName}></input>
+                    </div>
+
+                    {/* Genre Input */}
+                    <div className="form-group">
+                        <label>Genre: </label>
+                        <input type='text'
+                            className='form-control'
+                            value={this.state.Genre}
+                            onChange={this.addPLGenre}></input>
+                    </div>
+
+                    {/* Image Input */}
+                    <div className="form-group">
+                        <label>Image (URL): </label>
+                        <input type='text'
+                            className='form-control'
+                            value={this.state.Image}
+                            onChange={this.addPLImage}></input>
+                    </div>
+
+                    {/* Link Input */}
+                    <div className='form-group'>
+                        <label>Link (URl):</label>
+                        <input type='text'
+                            className='form-control'
+                            value={this.state.Link}
+                            onChange={this.addPLLink}>
+                        </input>
+                    </div>
+
+                    {/* Submit Button */}
+                    <div className='form-group'>
+                        <input type='submit'
+                            value='Add Playlist'
+                            className='btn btn-primary'></input>
+                    </div>
+                </form>
+            </div>
+        );
+    }
+}
+
